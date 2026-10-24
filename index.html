@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Kiếm Sĩ Huyền Thoại — Anime 2D Action Platformer</title>
+
+  <!-- Biểu tượng Icon Game (Favicon & Apple Touch Icon) -->
+  <link rel="icon" type="image/png" href="assets/icon.png">
+  <link rel="shortcut icon" href="assets/icon.png">
+  <link rel="apple-touch-icon" href="assets/icon.png">
+
+  <!-- Cấu hình Web App Manifest & Chế độ Chơi Màn Hình Ngang (Landscape PWA) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Kiếm Sĩ">
+  <meta name="theme-color" content="#020617">
+  <meta name="screen-orientation" content="landscape">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="mobile.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<main class="app">
+  <!-- Thanh điều hướng đầu trang (Topbar) -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">⚔</span>
+      <div>
+        <strong>KIẾM SĨ HUYỀN THOẠI</strong>
+        <small>LEGENDARY SWORDSMAN · 2D ACTION PLATFORMER</small>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="settingsBtn" class="soft-btn" title="Cài đặt">⚙ Cài đặt</button>
+      <button id="pauseBtn" class="soft-btn" title="Tạm dừng">Ⅱ Tạm dừng</button>
+    </div>
+  </header>
+
+  <!-- Màn hình Canvas trò chơi chính -->
+  <section class="game-shell">
+    <canvas id="game" width="1280" height="720" aria-label="Màn hình chơi game Kiếm Sĩ Huyền Thoại"></canvas>
+
+    <!-- Giao diện In-Game HUD -->
+    <div class="hud" id="hud" hidden>
+      <div class="hero-hud">
+        <div class="portrait" id="heroPortrait">⚔</div>
+        <div class="health-wrap">
+          <div class="hud-line">
+            <b>KAITO</b>
+            <span id="hpText">100 / 100 HP</span>
+          </div>
+          <div class="bar hp-bar"><i id="hpBar"></i></div>
+
+          <div class="hud-line mana-line">
+            <b>NĂNG LƯỢNG</b>
+            <span id="manaText">100 / 100 MP</span>
+          </div>
+          <div class="bar mana-bar"><i id="manaBar"></i></div>
+        </div>
+      </div>
+
+      <div class="stage-hud">
+        <span class="stage-label" id="stageName">RỪNG NGUYỆT QUANG</span>
+        <span id="stageSub">MÀN 1 · KHU RỪNG NGUYỆT QUANG</span>
+      </div>
+
+      <div class="score-hud">
+        <span class="gold-badge">🪙 <b id="goldText">0</b></span>
+        <span class="kill-badge">☠ <b id="killText">0</b></span>
+        <div class="sword-badge">
+          <span id="swordTierName">Cấp 1: Kiếm Bạc</span>
+        </div>
+        <button id="upgradeBtn" class="upgrade-btn">⬆ NÂNG CẤP (<b id="goldCost">35</b>G)</button>
+      </div>
+    </div>
+
+    <!-- Thanh máu Trùm Cuối (Boss HUD) -->
+    <div class="boss-hud" id="bossHud" hidden>
+      <div class="boss-info">
+        <span class="boss-title">TRẬN CHIẾN BOSS</span>
+        <span class="boss-name" id="bossName">HẮC LANG</span>
+      </div>
+      <div class="boss-bar-wrap">
+        <div class="boss-bar"><i id="bossBar"></i></div>
+        <span id="bossHpText">220 / 220</span>
+      </div>
+    </div>
+
+    <!-- Thông báo nổi Toast -->
+    <div class="toast" id="toast" hidden></div>
+
+    <!-- Lớp chứa chữ sát thương nổi và vàng -->
+    <div id="popupContainer" class="popup-container"></div>
+
+    <!-- Lớp phủ Modal / Bảng chức năng -->
+    <div class="screen-overlay" id="overlay">
+      <!-- Bảng Menu bắt đầu -->
+      <div class="panel intro-panel" id="panelIntro">
+        <div class="eyebrow">ANIME 2D ACTION PLATFORMER</div>
+        <h1>KIẾM SĨ<br><em>HUYỀN THOẠI</em></h1>
+        <p>Điều khiển kiếm sĩ Kaito, vung kiếm tung combo 3 nhịp, thi triển Nguyệt Quang Trảm và đánh bại Chúa Tể Hư Không!</p>
+        <div class="intro-stats">
+          <span>✦ 10 Màn chơi kỳ vĩ</span>
+          <span>✦ 18 Quái & 10 Đại Boss</span>
+          <span>✦ 10 Cấp thần kiếm</span>
+        </div>
+        <div class="menu-buttons">
+          <button id="startBtn" class="primary-btn">BẮT ĐẦU CHIẾN ĐẤU <span>➜</span></button>
+          <button id="continueBtn" class="secondary-btn" hidden>TIẾP TỤC HÀNH TRÌNH <span>➜</span></button>
+          <button id="bestiaryBtn" class="secondary-btn">HỒ SƠ QUÁI & BOSS <span>📜</span></button>
+          <button id="stageSelectBtn" class="secondary-btn">CHỌN MÀN CHƠI 🗺</button>
+        </div>
+        <small class="controls-note">A/D hoặc ← → di chuyển · Space nhảy · J chém · K tuyệt kỹ · Shift lướt né đòn</small>
+      </div>
+
+      <!-- Bảng Hồ Sơ Quái Vật & Trùm Cuối (Bestiary) -->
+      <div class="panel modal-panel bestiary-modal" id="panelBestiary" hidden>
+        <div class="modal-header">
+          <h2>HỒ SƠ QUÁI VẬT & TRÙM CUỐI (BESTIARY)</h2>
+        </div>
+
+        <div class="bestiary-layout">
+          <!-- Cột trái: Danh sách quái vật -->
+          <div class="bestiary-list-col">
+            <div class="bestiary-tab-list" id="bestiaryTabList"></div>
+          </div>
+
+          <!-- Cột phải: Khung Canvas xem trước & Thông số -->
+          <div class="bestiary-display-col">
+            <div class="bestiary-preview-box">
+              <canvas id="bestiaryCanvas" width="300" height="190"></canvas>
+              <!-- Cụm nút xem hành động -->
+              <div class="bestiary-actions-bar">
+                <button id="btnBestiaryAttack" class="btn-bestiary-action btn-act-attack" title="Xem đòn đánh cận chiến/bắn thường">
+                  <span>⚔</span> XEM TẤN CÔNG
+                </button>
+                <button id="btnBestiarySkill" class="btn-bestiary-action btn-act-skill" title="Xem tuyệt kỹ tối thượng">
+                  <span>✦</span> XEM TUYỆT KỸ
+                </button>
+              </div>
+            </div>
+
+            <!-- Thẻ thông tin chi tiết -->
+            <div class="bestiary-info-card" id="bestiaryInfo"></div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="closeBestiaryBtn" class="primary-btn">QUAY LẠI MÀN HÌNH CHÍNH <span>✓</span></button>
+        </div>
+      </div>
+
+      <!-- Bảng Hướng dẫn điều khiển -->
+      <div class="panel modal-panel" id="panelGuide" hidden>
+        <h2>HƯỚNG DẪN ĐIỀU KHIỂN & LỐI CHƠI</h2>
+        <div class="guide-grid">
+          <div class="guide-item"><kbd>A</kbd> / <kbd>D</kbd> hoặc <kbd>←</kbd> <kbd>→</kbd><span>Di chuyển Trái / Phải</span></div>
+          <div class="guide-item"><kbd>Space</kbd> / <kbd>W</kbd> / <kbd>↑</kbd><span>Nhảy lên / Bật cao</span></div>
+          <div class="guide-item"><kbd>J</kbd><span>Tấn công bằng kiếm (Nhấn liên tiếp tạo Combo 3 nhịp)</span></div>
+          <div class="guide-item"><kbd>K</kbd><span>Tuyệt kỹ Nguyệt Quang Trảm (Tốn 35 MP)</span></div>
+          <div class="guide-item"><kbd>Shift</kbd><span>Lướt né đòn (Kháng sát thương trong chốc lát)</span></div>
+          <div class="guide-item"><kbd>P</kbd> / <kbd>Esc</kbd><span>Tạm dừng trò chơi</span></div>
+        </div>
+        <button id="closeGuideBtn" class="primary-btn">ĐÃ HIỂU <span>✓</span></button>
+      </div>
+
+      <!-- Bảng Cài đặt -->
+      <div class="panel modal-panel" id="panelSettings" hidden>
+        <h2>CÀI ĐẶT TRÒ CHƠI</h2>
+        <div class="settings-list">
+          <div class="setting-row">
+            <span>Âm thanh trò chơi:</span>
+            <button id="toggleSoundSetting" class="soft-btn">Đang Bật</button>
+          </div>
+          <div class="setting-row">
+            <label for="volumeSlider">Âm lượng hiệu ứng:</label>
+            <input type="range" id="volumeSlider" min="0" max="100" value="70">
+          </div>
+          <div class="setting-row">
+            <span>Tra cứu thông tin:</span>
+            <div style="display: flex; gap: 8px;">
+              <button id="settingsGuideBtn" class="soft-btn" onclick="showGuide()">❓ Hướng dẫn</button>
+              <button id="settingsBestiaryBtn" class="soft-btn" onclick="openBestiaryFlow()">📜 Quái & Boss</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <span>Dữ liệu đã lưu:</span>
+            <button id="resetSaveBtn" class="danger-btn">Xóa dữ liệu chơi lại từ đầu</button>
+          </div>
+        </div>
+        <button id="closeSettingsBtn" class="primary-btn">LƯU & ĐÓNG <span>✓</span></button>
+      </div>
+
+      <!-- Bảng Nâng cấp Trang Bị (Kiếm / Áo Giáp / Giày) -->
+      <div class="panel modal-panel" id="panelUpgrade" hidden>
+        <h2>RÈN ĐÚC TRANG BỊ HUYỀN THOẠI</h2>
+
+        <!-- Hàng Tab chuyển đổi giữa 3 loại trang bị -->
+        <div class="upgrade-tabs-bar" style="display: flex; gap: 8px; justify-content: center; margin-bottom: 16px;">
+          <button id="tabSwordBtn" class="primary-btn" style="padding: 6px 14px; font-size: 13px;" onclick="switchUpgradeTab('sword')">⚔ THẦN KIẾM</button>
+          <button id="tabArmorBtn" class="secondary-btn" style="padding: 6px 14px; font-size: 13px;" onclick="switchUpgradeTab('armor')">🛡 ÁO GIÁP</button>
+          <button id="tabBootsBtn" class="secondary-btn" style="padding: 6px 14px; font-size: 13px;" onclick="switchUpgradeTab('boots')">👢 GIÀY CHIẾN</button>
+        </div>
+
+        <div class="upgrade-info-card">
+          <div class="sword-preview">
+            <span id="upgradeIcon" class="sword-icon" style="font-size: 38px;">⚔</span>
+            <div id="upgradeCurrentTier" class="tier-title">Cấp 2: Kiếm Lam Quang</div>
+          </div>
+          <div class="stat-compare">
+            <div class="stat-row">
+              <span id="upgradeStatLabel">Sát thương cơ bản:</span>
+              <strong id="upgradeStatText">12 DMG ➔ 20 DMG</strong>
+            </div>
+            <div class="stat-row">
+              <span id="upgradeSpecialLabel">Hiệu ứng đặc biệt:</span>
+              <strong id="upgradeSpecialText">Ánh Bạc ➔ Lam Quang</strong>
+            </div>
+            <div class="stat-row">
+              <span>Chi phí rèn đúc:</span>
+              <strong id="upgradeCostText" class="gold-text" style="color: #facc15;">35 Vàng</strong>
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions" style="margin-top: 16px; display: flex; gap: 10px; justify-content: center;">
+          <button id="confirmUpgradeBtn" class="primary-btn">XÁC NHẬN NÂNG CẤP <span>⚡</span></button>
+          <button id="closeUpgradeBtn" class="secondary-btn">ĐÓNG</button>
+        </div>
+      </div>
+
+      <!-- Bảng Nhập Mật Mã Mở Khóa Chọn Màn -->
+      <div class="panel modal-panel" id="panelPasscode" style="max-width: 440px;" hidden>
+        <h2>NHẬP MẬT MÃ CHỌN MÀN</h2>
+        <p style="font-size: 13px; color: #cbd5e1; margin-bottom: 15px;">Vui lòng nhập mật mã quản trị 4 chữ số để mở khóa chức năng chọn màn:</p>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
+          <input type="password" id="passcodeInput" aria-label="Nhập mật mã 4 chữ số" maxlength="4" placeholder="••••" style="font-size: 24px; letter-spacing: 12px; text-align: center; width: 180px; padding: 8px; border-radius: 8px; border: 2px solid #0284c7; background: #0f172a; color: #38bdf8; outline: none;">
+        </div>
+        <div id="passcodeError" style="color: #f87171; font-size: 12px; margin-bottom: 12px; height: 16px;" hidden>Mật mã không đúng! Vui lòng thử lại.</div>
+        <div class="modal-actions">
+          <button id="confirmPasscodeBtn" class="primary-btn">XÁC NHẬN <span>🔓</span></button>
+          <button id="closePasscodeBtn" class="secondary-btn">ĐÓNG</button>
+        </div>
+      </div>
+
+      <!-- Bảng Danh Sách 10 Màn Chơi (Stage Select) -->
+      <div class="panel modal-panel" id="panelStageSelect" style="max-width: 920px;" hidden>
+        <h2>DANH SÁCH 10 MÀN CHƠI (STAGE SELECT)</h2>
+        <div class="stage-grid" id="stageGrid">
+          <!-- Được tạo tự động bởi JS -->
+        </div>
+        <button id="closeStageSelectBtn" class="primary-btn">QUAY LẠI <span>✓</span></button>
+      </div>
+
+      <!-- Bảng Tạm dừng -->
+      <div class="panel" id="panelPause" hidden>
+        <div class="eyebrow">TẠM DỪNG TRÒ CHƠI</div>
+        <h1>ĐANG TẠM DỪNG</h1>
+        <p>Nghỉ tay một chút trước khi tiếp tục cuộc hành trình.</p>
+        <div class="menu-buttons">
+          <button id="resumeBtn" class="primary-btn">TIẾP TỤC CHIẾN ĐẤU <span>▶</span></button>
+          <button id="restartStageBtn" class="secondary-btn">CHƠI LẠI MÀN NÀY <span>↺</span></button>
+          <button id="quitMenuBtn" class="secondary-btn">VỀ MÀN HÌNH CHÍNH <span>⌂</span></button>
+        </div>
+      </div>
+
+      <!-- Bảng Kết thúc (Thất bại / Chiến thắng) -->
+      <div class="panel" id="panelEnd" hidden>
+        <div id="endContent"></div>
+      </div>
+    </div>
+
+    <!-- Bàn phím ảo di động -->
+    <div class="mobile-controls" id="mobileControls" hidden>
+      <!-- Cụm cần gạt Cảm ứng Analog bên trái -->
+      <div class="joystick-container" id="joystickContainer">
+        <div class="joystick-base" id="joystickBase">
+          <div class="joystick-knob" id="joystickKnob"></div>
+        </div>
+      </div>
+      <div class="action-pad">
+        <!-- Nút Nhảy (Top-Left) -->
+        <button data-key="jump" class="jump-btn" title="Nhảy">
+          <svg viewBox="0 0 32 32" class="action-svg">
+            <circle cx="18" cy="7" r="3.5" fill="#e0f2fe"/>
+            <path d="M14 13 C16 11, 20 11, 22 14 L20 20 L24 25" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M15 14 L10 18 L6 22" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M18 19 L13 24 L9 30" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" fill="none"/>
+          </svg>
+        </button>
+
+        <!-- Nút Lướt Né (Top-Right) -->
+        <button data-key="dash" class="dash-btn" title="Lướt">
+          <svg viewBox="0 0 32 32" class="action-svg">
+            <path d="M6 16 Q14 8 26 12 Q20 18 16 26 Q12 20 6 16 Z" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M4 22 C10 18, 18 20, 24 16" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M2 10 C8 12, 14 10, 20 6" stroke="#e0f2fe" stroke-width="2" stroke-linecap="round" fill="none"/>
+          </svg>
+        </button>
+
+        <!-- Nút Tuyệt Kỹ Nguyệt Quang Trảm (Bottom-Left) -->
+        <button data-key="skill" class="skill-btn" title="Nguyệt Quang Trảm">
+          <svg viewBox="0 0 32 32" class="action-svg">
+            <path d="M6 26 C14 10, 22 8, 28 6 C24 18, 18 24, 6 26 Z" fill="#38bdf8" stroke="#e0f2fe" stroke-width="1.5"/>
+            <path d="M8 24 L18 14" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M5 28 L11 22" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        <!-- Nút Chém Kiếm Chính (Bottom-Right, Lớn nhất) -->
+        <button data-key="attack" class="attack-btn" title="Chém">
+          <svg viewBox="0 0 32 32" class="action-svg main-sword-svg">
+            <defs>
+              <linearGradient id="swordGradMain" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="50%" stop-color="#38bdf8"/>
+                <stop offset="100%" stop-color="#0284c7"/>
+              </linearGradient>
+            </defs>
+            <path d="M26 4 L22 8 L12 18 L8 18 L8 22 L12 22 L22 12 Z" fill="url(#swordGradMain)"/>
+            <path d="M28 2 L24 6 L22 4 Z" fill="#e0f2fe"/>
+            <path d="M11 19 L6 24 L4 26 L6 28 L8 26 L13 21 Z" fill="#f59e0b"/>
+            <line x1="8" y1="18" x2="22" y2="4" stroke="#ffffff" stroke-width="1.5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Lớp phủ Cảnh báo Xoay Ngang Màn Hình khi dùng Điện thoại Màn hình dọc -->
+    <div id="portraitOverlay" class="portrait-overlay">
+      <div class="rotate-phone-anim">📱</div>
+      <h2>VUI LÒNG XOAY NGANG MÀN HÌNH</h2>
+      <p>Trò chơi Kiếm Sĩ Huyền Thoại trải nghiệm tốt nhất ở chế độ Màn Hình Ngang (Landscape).</p>
+      <small>Hãy xoay ngang điện thoại của bạn để chiến đấu mượt mà nhất!</small>
+    </div>
+  </section>
+
+  <!-- Footer thanh trạng thái -->
+  <footer class="footer">
+    <span>Di chuyển: A / D / Phím mũi tên</span>
+    <span>Hành động: J (Chém) · K (Tuyệt kỹ) · Shift (Lướt) · Space (Nhảy)</span>
+    <span id="footerStatus">Sẵn sàng xuất trận</span>
+  </footer>
+</main>
+
+<!-- ===================================================================== -->
+<!-- 1. NẠP 18 QUÁI VẬT THƯỜNG                                              -->
+<!-- ===================================================================== -->
+<script src="monsters/Slime.js"></script>
+<script src="monsters/Goblin.js"></script>
+<script src="monsters/Skeleton.js"></script>
+<script src="monsters/Bat.js"></script>
+<script src="monsters/Sorcerer.js"></script>
+<script src="monsters/DarkKnight.js"></script>
+<script src="monsters/Obsidian Demon.js"></script>
+<script src="monsters/Darkling Dragon.js"></script>
+<script src="monsters/FrostStalker.js"></script>
+<script src="monsters/GlacialBat.js"></script>
+<script src="monsters/StormRaven.js"></script>
+<script src="monsters/ThunderApe.js"></script>
+<script src="monsters/MagmaBrute.js"></script>
+<script src="monsters/LavaCrawler.js"></script>
+<script src="monsters/SanctuaryGolem.js"></script>
+<script src="monsters/FallenCherub.js"></script>
+<script src="monsters/VoidDevourer.js"></script>
+<script src="monsters/RiftPhantom.js"></script>
+
+<!-- ===================================================================== -->
+<!-- 2. NẠP 10 TỆP ĐỒ HỌA RIÊNG BIỆT CHO 10 ĐẠI BOSS                        -->
+<!-- ===================================================================== -->
+<script src="monsters/BossHacLang.js"></script>
+<script src="monsters/BossKySiTroTan.js"></script>
+<script src="monsters/BossChuaTeBongDem.js"></script>
+<script src="monsters/BossRongBongToi.js"></script>
+<script src="monsters/BossYmir.js"></script>
+<script src="monsters/BossThunderbird.js"></script>
+<script src="monsters/BossSurtr.js"></script>
+<script src="monsters/BossSeraph.js"></script>
+<script src="monsters/BossChronos.js"></script>
+<script src="monsters/BossPrimordial.js"></script>
+
+<!-- ===================================================================== -->
+<!-- 3. BỘ ĐIỀU PHỐI BOSS, QUÁI, HERO, MÔI TRƯỜNG & LOGIC                   -->
+<!-- ===================================================================== -->
+<script src="monsters/Boss.js"></script>
+<script src="monster.js"></script>
+<script src="hero.js"></script>
+<script src="environment.js"></script>
+<!-- TÁCH THÀNH 2 FILE GAME TRUNG TÂM -->
+<script src="game01.js"></script>
+<script src="game02.js"></script>
+</body>
+</html>
