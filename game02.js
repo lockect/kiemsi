@@ -2315,6 +2315,11 @@ function toggleSound() {
 }
 
 // Hỗ trợ nút điều khiển cảm ứng di động
+if ('ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 1024) {
+  var mc = $('mobileControls');
+  if (mc) mc.removeAttribute('hidden');
+}
+
 document.querySelectorAll('.mobile-controls button').forEach(btn => {
   var key = btn.dataset.key;
   btn.addEventListener('pointerdown', e => {
