@@ -123,15 +123,15 @@ var keySeq = '';
 // [TÌM KIẾM: 10_THAN_KIEM] BẢNG THÔNG SỐ 10 CẤP ĐỘ THẦN KIẾM
 // ============================================================================
 var SWORD_TIERS = [
-  { name: 'Cấp 1: Kiếm Bạc', dmgBonus: 0, color: '#e2e8f0', glow: '#38bdf8', aura: 'Ánh Bạc', cost: 35 },
-  { name: 'Cấp 2: Kiếm Lam Quang', dmgBonus: 8, color: '#38bdf8', glow: '#0284c7', aura: 'Lam Quang', cost: 75 },
-  { name: 'Cấp 3: Kiếm Nguyệt Ảnh', dmgBonus: 18, color: '#c084fc', glow: '#7e22ce', aura: 'Nguyệt Ảnh', cost: 130 },
-  { name: 'Cấp 4: Kiếm Thiên Không', dmgBonus: 30, color: '#60a5fa', glow: '#2563eb', aura: 'Thiên Không', cost: 200 },
-  { name: 'Cấp 5: Kiếm Huyền Thoại', dmgBonus: 48, color: '#fbbf24', glow: '#d97706', aura: 'Thánh Quang', cost: 280 },
-  { name: 'Cấp 6: Băng Hồn Kiếm', dmgBonus: 65, color: '#38bdf8', glow: '#e0f2fe', aura: 'Băng Tuyết', cost: 320 },
-  { name: 'Cấp 7: Lôi Thần Trảm', dmgBonus: 85, color: '#fde047', glow: '#fbbf24', aura: 'Lôi Điện', cost: 450 },
-  { name: 'Cấp 8: Hỏa Ngục Đại Kiếm', dmgBonus: 110, color: '#f97316', glow: '#ef4444', aura: 'Hỏa Ngục', cost: 620 },
-  { name: 'Cấp 9: Thánh Quang Kiếm', dmgBonus: 140, color: '#ffffff', glow: '#fef08a', aura: 'Thánh Linh', cost: 850 },
+  { name: 'Cấp 1: Kiếm Bạc', dmgBonus: 0, color: '#e2e8f0', glow: '#38bdf8', aura: 'Ánh Bạc', cost: 70 },
+  { name: 'Cấp 2: Kiếm Lam Quang', dmgBonus: 8, color: '#38bdf8', glow: '#0284c7', aura: 'Lam Quang', cost: 150 },
+  { name: 'Cấp 3: Kiếm Nguyệt Ảnh', dmgBonus: 18, color: '#c084fc', glow: '#7e22ce', aura: 'Nguyệt Ảnh', cost: 260 },
+  { name: 'Cấp 4: Kiếm Thiên Không', dmgBonus: 30, color: '#60a5fa', glow: '#2563eb', aura: 'Thiên Không', cost: 400 },
+  { name: 'Cấp 5: Kiếm Huyền Thoại', dmgBonus: 48, color: '#fbbf24', glow: '#d97706', aura: 'Thánh Quang', cost: 560 },
+  { name: 'Cấp 6: Băng Hồn Kiếm', dmgBonus: 65, color: '#38bdf8', glow: '#e0f2fe', aura: 'Băng Tuyết', cost: 640 },
+  { name: 'Cấp 7: Lôi Thần Trảm', dmgBonus: 85, color: '#fde047', glow: '#fbbf24', aura: 'Lôi Điện', cost: 900 },
+  { name: 'Cấp 8: Hỏa Ngục Đại Kiếm', dmgBonus: 110, color: '#f97316', glow: '#ef4444', aura: 'Hỏa Ngục', cost: 1240 },
+  { name: 'Cấp 9: Thánh Quang Kiếm', dmgBonus: 140, color: '#ffffff', glow: '#fef08a', aura: 'Thánh Linh', cost: 1700 },
   { name: 'Cấp 10: Vũ Trụ Khởi Nguyên', dmgBonus: 180, color: '#c084fc', glow: '#f43f5e', aura: 'Thái Cổ Vũ Trụ', cost: 0 }
 ];
 
@@ -139,15 +139,15 @@ var SWORD_TIERS = [
 // [TÌM KIẾM: 10_AO_GIAP] BẢNG THÔNG SỐ 10 CẤP ĐỘ ÁO GIÁP
 // ============================================================================
 var ARMOR_TIERS = [
-  { name: 'Cấp 1: Giáp Bạc Hiệp Sĩ', hpBonus: 30, dmgReduction: 0.04, desc: 'Giảm 4% sát thương nhận vào', cost: 30, icon: '🛡' },
-  { name: 'Cấp 2: Giáp Lam Quang Hoàng Hôn', hpBonus: 65, dmgReduction: 0.07, desc: 'Giảm 7% sát thương nhận vào', cost: 70, icon: '🛡' },
-  { name: 'Cấp 3: Dạ Nguyệt Thiết Giáp', hpBonus: 110, dmgReduction: 0.10, desc: 'Giảm 10% sát thương nhận vào', cost: 120, icon: '🛡' },
-  { name: 'Cấp 4: Hắc Long Vảy Giáp', hpBonus: 170, dmgReduction: 0.14, desc: 'Giảm 14% sát thương nhận vào', cost: 190, icon: '🛡' },
-  { name: 'Cấp 5: Băng Tinh Thần Giáp', hpBonus: 240, dmgReduction: 0.18, desc: 'Giảm 18% sát thương nhận vào', cost: 270, icon: '🛡' },
-  { name: 'Cấp 6: Lôi Thần Khôi Giáp', hpBonus: 320, dmgReduction: 0.22, desc: 'Kháng Tê Liệt (Stun) & Giảm 22% DMG', cost: 360, icon: '🛡' },
-  { name: 'Cấp 7: Hỏa Ngục Nham Giáp', hpBonus: 420, dmgReduction: 0.26, desc: 'Miễn sát thương bẫy gai & Giảm 26%', cost: 480, icon: '🛡' },
-  { name: 'Cấp 8: Thánh Quang Thiên Sứ Giáp', hpBonus: 540, dmgReduction: 0.30, desc: 'Giảm 30% sát thương nhận vào', cost: 650, icon: '🛡' },
-  { name: 'Cấp 9: Hỗn Mang Nghịch Giáp', hpBonus: 680, dmgReduction: 0.35, desc: 'Giảm 35% sát thương nhận vào', cost: 850, icon: '🛡' },
+  { name: 'Cấp 1: Giáp Bạc Hiệp Sĩ', hpBonus: 30, dmgReduction: 0.04, desc: 'Giảm 4% sát thương nhận vào', cost: 60, icon: '🛡' },
+  { name: 'Cấp 2: Giáp Lam Quang Hoàng Hôn', hpBonus: 65, dmgReduction: 0.07, desc: 'Giảm 7% sát thương nhận vào', cost: 140, icon: '🛡' },
+  { name: 'Cấp 3: Dạ Nguyệt Thiết Giáp', hpBonus: 110, dmgReduction: 0.10, desc: 'Giảm 10% sát thương nhận vào', cost: 240, icon: '🛡' },
+  { name: 'Cấp 4: Hắc Long Vảy Giáp', hpBonus: 170, dmgReduction: 0.14, desc: 'Giảm 14% sát thương nhận vào', cost: 380, icon: '🛡' },
+  { name: 'Cấp 5: Băng Tinh Thần Giáp', hpBonus: 240, dmgReduction: 0.18, desc: 'Giảm 18% sát thương nhận vào', cost: 540, icon: '🛡' },
+  { name: 'Cấp 6: Lôi Thần Khôi Giáp', hpBonus: 320, dmgReduction: 0.22, desc: 'Kháng Tê Liệt (Stun) & Giảm 22% DMG', cost: 720, icon: '🛡' },
+  { name: 'Cấp 7: Hỏa Ngục Nham Giáp', hpBonus: 420, dmgReduction: 0.26, desc: 'Miễn sát thương bẫy gai & Giảm 26%', cost: 960, icon: '🛡' },
+  { name: 'Cấp 8: Thánh Quang Thiên Sứ Giáp', hpBonus: 540, dmgReduction: 0.30, desc: 'Giảm 30% sát thương nhận vào', cost: 1300, icon: '🛡' },
+  { name: 'Cấp 9: Hỗn Mang Nghịch Giáp', hpBonus: 680, dmgReduction: 0.35, desc: 'Giảm 35% sát thương nhận vào', cost: 1700, icon: '🛡' },
   { name: 'Cấp 10: Sáng Thế Tinh Vân Giáp', hpBonus: 850, dmgReduction: 0.42, desc: 'Giảm 42% sát thương mọi đòn', cost: 0, icon: '🛡' }
 ];
 
@@ -156,14 +156,14 @@ var ARMOR_TIERS = [
 // ============================================================================
 var BOOTS_TIERS = [
   { name: 'Cấp 1: Giày Da Lữ Khách', spdMult: 1.10, jumpMult: 1.0, canDoubleJump: false, canBlink: false, desc: 'Tốc độ chạy +10%', cost: 25, icon: '👢' },
-  { name: 'Cấp 2: Thiết Ủng Lam Quang', spdMult: 1.15, jumpMult: 1.08, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +15%, Nhảy +8%', cost: 60, icon: '👢' },
-  { name: 'Cấp 3: Hắc Ảnh Dạ Hành Ủng', spdMult: 1.20, jumpMult: 1.08, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +20%, Lướt mượt', cost: 110, icon: '👢' },
-  { name: 'Cấp 4: Hư Không Long Trảo Ủng', spdMult: 1.25, jumpMult: 1.12, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +25%, Bám sàn', cost: 180, icon: '👢' },
-  { name: 'Cấp 5: Băng Phong Tuyết Ủng', spdMult: 1.30, jumpMult: 1.15, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +30%, Chống trượt băng', cost: 260, icon: '👢' },
-  { name: 'Cấp 6: Lôi Điểu Phong Ba Ủng', spdMult: 1.35, jumpMult: 1.18, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +35%, Hồi lướt nhanh', cost: 350, icon: '👢' },
-  { name: 'Cấp 7: Dung Nham Bạo Bộ', spdMult: 1.40, jumpMult: 1.20, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +40%, Bật nhảy cao', cost: 470, icon: '👢' },
-  { name: 'Cấp 8: Thiên Không Dực Ủng', spdMult: 1.45, jumpMult: 1.20, canDoubleJump: true, canBlink: false, desc: 'Kích hoạt Nhảy Đôi (Double Jump)', cost: 640, icon: '👢' },
-  { name: 'Cấp 9: Hỗn Mang Thời Không Ủng', spdMult: 1.50, jumpMult: 1.22, canDoubleJump: true, canBlink: true, desc: 'Tốc Biến Vô Địch (Blink xuyên vật thể)', cost: 840, icon: '👢' },
+  { name: 'Cấp 2: Thiết Ủng Lam Quang', spdMult: 1.15, jumpMult: 1.08, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +15%, Nhảy +8%', cost: 120, icon: '👢' },
+  { name: 'Cấp 3: Hắc Ảnh Dạ Hành Ủng', spdMult: 1.20, jumpMult: 1.08, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +20%, Lướt mượt', cost: 220, icon: '👢' },
+  { name: 'Cấp 4: Hư Không Long Trảo Ủng', spdMult: 1.25, jumpMult: 1.12, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +25%, Bám sàn', cost: 360, icon: '👢' },
+  { name: 'Cấp 5: Băng Phong Tuyết Ủng', spdMult: 1.30, jumpMult: 1.15, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +30%, Chống trượt băng', cost: 520, icon: '👢' },
+  { name: 'Cấp 6: Lôi Điểu Phong Ba Ủng', spdMult: 1.35, jumpMult: 1.18, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +35%, Hồi lướt nhanh', cost: 700, icon: '👢' },
+  { name: 'Cấp 7: Dung Nham Bạo Bộ', spdMult: 1.40, jumpMult: 1.20, canDoubleJump: false, canBlink: false, desc: 'Tốc độ +40%, Bật nhảy cao', cost: 940, icon: '👢' },
+  { name: 'Cấp 8: Thiên Không Dực Ủng', spdMult: 1.45, jumpMult: 1.20, canDoubleJump: true, canBlink: false, desc: 'Kích hoạt Nhảy Đôi (Double Jump)', cost: 1280, icon: '👢' },
+  { name: 'Cấp 9: Hỗn Mang Thời Không Ủng', spdMult: 1.50, jumpMult: 1.22, canDoubleJump: true, canBlink: true, desc: 'Tốc Biến Vô Địch (Blink xuyên vật thể)', cost: 1680, icon: '👢' },
   { name: 'Cấp 10: Tinh Vân Vạn Giới Ủng', spdMult: 1.60, jumpMult: 1.25, canDoubleJump: true, canBlink: true, desc: 'Nhảy đôi + Tốc biến + Tốc độ +60%', cost: 0, icon: '👢' }
 ];
 
